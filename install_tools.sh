@@ -1,12 +1,10 @@
 #!/bin/bash
 
+echo "Golang ja instalado??" && sleep 6
 # Instalar Pre-requisitos
-echo "Baixando e instalando pre-requisitos..."
+echo "Baixando e instalando pre-requisitos..." && sleep 2
 apt-get update
 apt-get upgrade -y
-wget https://go.dev/dl/go1.21.0.linux-amd64.tar.gz
-rm -rf /usr/local/go && tar -C /usr/local -xzf go1.21.0.linux-amd64.tar.gz
-export PATH=$PATH:/usr/local/go/bin
 source /root/.bashrc
 apt install git -y
 apt install -y libpcap-dev
@@ -61,7 +59,7 @@ for tool in "${tools[@]}"; do
 
     # Comandos adicionais para as ferramentas após a instalação
     if [[ "$tool" == *"github.com/tomnomnom/gf@latest"* ]]; then
-        echo "A executar comandos adicionais para GF..."
+        echo "A executar comandos adicionais para GF..." && sleep 2
         echo 'source $GOPATH/src/github.com/tomnomnom/gf/gf-completion.bash' >> ~/.bashrc
         source ~/.bashrc
         mkdir .gf
@@ -73,7 +71,7 @@ for tool in "${tools[@]}"; do
 done
 
 # Instalação de outras ferramentas com comandos específicos
-echo "Instalando outras ferramentas..."
+echo "Instalando outras ferramentas..." && sleep 2
 # Comandos para clonar repositórios
 cd
 mkdir tools
