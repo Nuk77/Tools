@@ -31,17 +31,17 @@ echo "premut running"
 cat "$target/subdomains.txt" | alterx -enrinch | anew "$target/premut.txt" | lolcat
 # validating domains and passing to http
 echo "domain validation running"
-cat "$target/subdomains.txt" "$target/premut.txt" | httpx | anew "$target/httpx_domains.txt" | lolcat
+cat "$target/subdomains.txt" "$target/premut.txt" | httpx -silent | anew "$target/httpx_domains.txt" | lolcat
 echo "domain validation finished"
 # collecting urls
 echo "running url collection"
 cat "$target/httpx_domains.txt" | waybackurls | anew "$target/wayback_urls.txt" | lolcat
 cat "$target/httpx_domains.txt" | gau | anew  "$target/gau_urls.txt" | lolcat
-cat "$target/httpx_domains.txt" | katana | anew "$target/katana.urls.txt" | lolcat
+cat "$target/httpx_domains.txt" | katana -d 2 | anew "$target/katana.urls.txt" | lolcat
 cat "$target/wayback_urls.txt" "$target/gau_urls.txt" "$target/katana.urls.txt" | httpx -silent | anew "$target/final_crawler.txt" | lolcat
 echo "finished url collection"
 # + urls
-echo "JS urls"
+echo "JS TXT PDF urls"
 cat "$target/final_crawler.txt" | grep .js | anew "$target/JS/js.txt"
 cat "$target/final_crawler.txt" | grep .json | anew "$target/JSON/json.txt"
 cat "$target/final_crawler.txt" | grep .txt | anew "$target/TXT/text.txt"
@@ -49,8 +49,17 @@ cat "$target/final_crawler.txt" | grep .xml | anew "$target/XML/Xml.txt"
 cat "$target/final_crawler.txt" | grep .pdf | anew "$target/PDF/pdf.txt"
 # Filter only URLs parameters and save to file "parameters.txt"
 echo "leaving only parameters"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | anew "$target/param.txt"
-cat "$target/param.txt | "
+# leaving only parameters
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf xss | anew "$target/param_xss.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf idor | anew "$target/param_idor.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf redirect | anew "$target/param_redirect.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf rce | anew "$target/param_rce.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf sqli | anew "$target/param_sqli.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf ssrf | anew "$target/param_ssrf.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf lfi0 | anew "$target/param_lfi.txt"
+# Concatenate all parameters into a single file for further processing
+cat "$target/param_xss.txt" "$target/param_idor.txt" "$target/param_redirect.txt" "$target/param_lfi.txt" "$target/param_ssrf.txt" "$target/param_sqli.txt" "$target/param_rce.txt" > "$target/all_param.txt"
+
 #
 echo "Please choose from the following options for nuclei templates:"
 echo "1. Cves"
@@ -107,4 +116,4 @@ if [[ $templates == *"10"* ]]; then
 fi
 
 echo "Starting Nuclei scan with the selected templates..."
-cat "$target/param.txt" | nuclei -stats -si 100 $t_args -s low,medium,high,critical,unknown -o "$target/nuclei_results_for_$target.txt" | notify
+cat "$target/all_param.txt" | nuclei -stats -si 100 $t_args -s low,medium,high,critical,unknown -silent -o "$target/nuclei_results_for_$target.txt" | notify
