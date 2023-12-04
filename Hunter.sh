@@ -25,13 +25,14 @@ echo "running first enumeration"
 subfinder -d "$target" -all -silent | anew "$target/subdomains.txt" | lolcat 
 amass enum -d "$target" -silent | anew "$target/subdomains.txt" | lolcat
 assetfinder "$target" | anew "$target/subdomains.txt" | lolcat
-echo "first enumeration finished"
+cat "$target/subdomains.txt" | subfinder -all -silent | anew "$target/reco_reco.txt"
+echo "Recon finished"
 # premut
 echo "premut running"
-cat "$target/subdomains.txt" | alterx -enrinch | anew "$target/premut.txt" | lolcat
+cat "$target/reco_reco.txt" | alterx -enrinch | anew "$target/premut.txt" | lolcat
 # validating domains and passing to http
 echo "domain validation running"
-cat "$target/subdomains.txt" "$target/premut.txt" | httpx -silent | anew "$target/httpx_domains.txt" | lolcat
+cat "$target/reco_reco.txt" "$target/premut.txt" | httpx -silent | anew "$target/httpx_domains.txt" | lolcat
 echo "domain validation finished"
 # collecting urls
 echo "running url collection"
@@ -42,23 +43,23 @@ cat "$target/wayback_urls.txt" "$target/gau_urls.txt" "$target/katana.urls.txt" 
 echo "finished url collection"
 # + urls
 echo "JS TXT PDF urls"
-cat "$target/final_crawler.txt" | grep .js | anew "$target/JS/js.txt"
-cat "$target/final_crawler.txt" | grep .json | anew "$target/JSON/json.txt"
-cat "$target/final_crawler.txt" | grep .txt | anew "$target/TXT/text.txt"
-cat "$target/final_crawler.txt" | grep .xml | anew "$target/XML/Xml.txt"
-cat "$target/final_crawler.txt" | grep .pdf | anew "$target/PDF/pdf.txt"
+cat "$target/final_crawler.txt" | grep .js | anew "$target/JS/js.txt" | lolcat
+cat "$target/final_crawler.txt" | grep .json | anew "$target/JSON/json.txt" | lolcat
+cat "$target/final_crawler.txt" | grep .txt | anew "$target/TXT/text.txt" | lolcat
+cat "$target/final_crawler.txt" | grep .xml | anew "$target/XML/Xml.txt" | lolcat
+cat "$target/final_crawler.txt" | grep .pdf | anew "$target/PDF/pdf.txt" | lolcat
 # Filter only URLs parameters and save to file "parameters.txt"
 echo "leaving only parameters"
 # leaving only parameters
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf xss | anew "$target/param_xss.txt"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf idor | anew "$target/param_idor.txt"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf redirect | anew "$target/param_redirect.txt"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf rce | anew "$target/param_rce.txt"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf sqli | anew "$target/param_sqli.txt"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf ssrf | anew "$target/param_ssrf.txt"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf lfi0 | anew "$target/param_lfi.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf xss | anew "$target/param_xss.txt" | lolcat
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf idor | anew "$target/param_idor.txt" | lolcat
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf redirect | anew "$target/param_redirect.txt" | lolcat
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf rce | anew "$target/param_rce.txt" | lolcat
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf sqli | anew "$target/param_sqli.txt" | lolcat
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf ssrf | anew "$target/param_ssrf.txt" | lolcat
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf lfi0 | anew "$target/param_lfi.txt" | lolcat
 # Concatenate all parameters into a single file for further processing
-cat "$target/param_xss.txt" "$target/param_idor.txt" "$target/param_redirect.txt" "$target/param_lfi.txt" "$target/param_ssrf.txt" "$target/param_sqli.txt" "$target/param_rce.txt" > "$target/all_param.txt"
+cat "$target/param_xss.txt" "$target/param_idor.txt" "$target/param_redirect.txt" "$target/param_lfi.txt" "$target/param_ssrf.txt" "$target/param_sqli.txt" "$target/param_rce.txt" > "$target/all_param.txt" | lolcat
 
 #
 echo "Please choose from the following options for nuclei templates:"
