@@ -57,7 +57,7 @@ cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf
 cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf rce | anew "$target/param_rce.txt"
 cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf sqli | anew "$target/param_sqli.txt"
 cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf ssrf | anew "$target/param_ssrf.txt"
-cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf lfi0 | anew "$target/param_lfi.txt"
+cat "$target/final_crawler.txt" | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|icon|pdf|svg|txt|js)" | gf lfi | anew "$target/param_lfi.txt"
 # Concatenate all parameters into a single file for further processing
 cat "$target/param_xss.txt" "$target/param_idor.txt" "$target/param_redirect.txt" "$target/param_lfi.txt" "$target/param_ssrf.txt" "$target/param_sqli.txt" "$target/param_rce.txt" > "$target/all_param.txt"
 
