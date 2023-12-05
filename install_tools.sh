@@ -65,7 +65,6 @@ for tool in "${tools[@]}"; do
         mkdir .gf
         cp -r $GOPATH/src/github.com/tomnomnom/gf/examples ~/.gf
         git clone https://github.com/1ndianl33t/Gf-Patterns
-        mkdir .gf
         mv ~/Gf-Patterns/*.json ~/.gf
     fi
 done
