@@ -50,17 +50,16 @@ check_dependencies() {
     fi
     
     # Usar arquivo passado como argumento ou js_validos.txt por padrão
-    INPUT_FILE="${1:-js_validos.txt}"
+    LOCAL_INPUT_FILE="${1:-js_validos.txt}"
     
-    if [ ! -f "$INPUT_FILE" ]; then
-        print_critical "Arquivo $INPUT_FILE não encontrado."
+    if [ ! -f "$LOCAL_INPUT_FILE" ]; then
+        print_critical "Arquivo $LOCAL_INPUT_FILE não encontrado."
         print_info "Uso: $0 [arquivo_js.txt]"
         print_info "Se nenhum arquivo for especificado, usa 'js_validos.txt' por padrão."
         exit 1
     fi
     
     print_success "Todas as dependências OK"
-    echo "$INPUT_FILE"
 }
 
 # Expressões regulares para diferentes tipos de secrets
